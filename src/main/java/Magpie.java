@@ -10,45 +10,71 @@
  * @author Laurie White
  * @version April 2012
  */
-public class Magpie
-{
+public class Magpie {
     /**
-     * Get a default greeting   
+     * Get a default greeting
+     *
      * @return a greeting
      */
-    public String getGreeting()
-    {
+    public String getGreeting() {
         return "Hello, let's talk.";
     }
-    
+
     /**
      * Gives a response to a user statement
-     * 
-     * @param statement
-     *            the user statement
+     *
+     * @param statement the user statement
      * @return a response based on the rules given
      */
-    public String getResponse(String statement)
-    {
+    public String getResponse(String statement) {
+
         String response = "";
-        if (statement.indexOf("no") >= 0)
-        {
-            response = "Why so negative?";
+        if (findWord(statement,"I want") >= 0){
+            response = transformIWantStatement(statement);
         }
-        else if (statement.indexOf("mother") >= 0
+        else if (findWord(statement,"I") >= 0 || findWord(statement,"you") > findWord(statement,"I")){
+            response = transformIYouStatement(statement);
+        }
+        else if (findWord(statement, "I want to") >= 0){
+            response = transformIWantToStatement(statement);
+        }
+        else if (findWord(statement, "you")>= 0 && findWord(statement, "me")> findWord(statement, "you")){
+            response = transformYouMeStatement(statement);
+        }
+        else if (findWord(statement, "I feel") >= 0){
+            response = transformIWantToStatement(statement);
+        }
+
+
+
+
+        String response = "";
+        if (statement.indexOf("no") >= 0) {
+            response = "Why so negative?";
+        } else if (statement.indexOf("mother") >= 0
                 || statement.indexOf("father") >= 0
                 || statement.indexOf("sister") >= 0
-                || statement.indexOf("brother") >= 0)
-        {
+                || statement.indexOf("brother") >= 0) {
             response = "Tell me more about your family.";
-        }
-        else
-        {
-            response = getRandomResponse();
+        } else if (statement.indexOf("My teacher") >= 0
+                || statement.indexOf("Mr") >= 0
+                || statement.indexOf("Mrs") >= 0) {
+            response = "Your teacher seems swanky.";
+        } else if (statement.indexOf("cat") >= 0
+                || statement.indexOf("dog") >= 0) {
+            response = "tell me more about your pets.";
+        } else if (statement.trim() == "") {
+            response = "Say something dude";
+        } else if (statement.indexOf("books") >= 0
+                || statement.indexOf("read") >= 0) {
+            response = "What have you been reading";
+        } else if (statement.indexOf("Harry Potter") >= 0
+                || statement.indexOf("quiz") >= 0) {
+            response = "Tell me about your house";
         }
         return response;
     }
-    
+
     /**
      * Pick a default response to use if nothing else fits.
      * @return a non-committal string
@@ -88,10 +114,28 @@ public class Magpie
     // of str or word
 
     // The method returns the index of the first character in word
-    // if it is found, and returns -1 otherwise. 
+    // if it is found, and returns -1 otherwise.
+    //Zara
     public int findWord(String str, String word) {
+        str = str.toUpperCase();
+        word = word.toUpperCase();
+        int index = str.indexOf(word);
+        if((index)==0 && str.charAt(index + word.length()) == ' ' ) {
+         return index; }
+        else if(str.charAt(index-1)==' ' && (index+word.length()==str.length())) {
+       return index; }
+        else if(str.charAt(index-1)==' ' && str.charAt(index + word.length()) == ' ' ) {
+            return index; }
+        //if(index - 1 == 0 && str.charAt(index + 1) == ' ');
+
+
+                // str.charAt(str.indexOf(word)-1)==' ';
+
+
         return -1;
-    }
+
+        }
+
 
     
     // We will work on the following methods later!
@@ -104,8 +148,9 @@ public class Magpie
      */
     public String transformIWantStatement(String statement)
     {
-        //your code here
-        return "";
+        String want="";
+       want=statement.substring(statement.indexOf("I want")+7, statement.length());
+        return "Would you really be happy if you had " + want + '?';
     }
 
     /**
@@ -116,8 +161,10 @@ public class Magpie
      */
     public String transformIYouStatement(String statement)
     {
-        //your code here
-        return "";
+        String iu="";
+        iu=statement.substring(statement.indexOf("I")+2,statement.indexOf("you")-1);
+
+        return "Why do you " + iu +" me?";
     }
 
     /**
@@ -128,8 +175,11 @@ public class Magpie
      */
     public String transformIWantToStatement(String statement)
     {
-        // your code here
-        return "";
+        String iwantto="";
+        iwantto=statement.substring(statement.indexOf("to")+2,statement.length());
+
+        return ("What would it mean to"+iwantto +'?');
+
     }
 
 
@@ -143,7 +193,26 @@ public class Magpie
      */
     public String transformYouMeStatement(String statement)
     {
-        // your code here
-        return "";
+    String something="";
+    something=statement.substring(statement.indexOf("you")+5,statement.indexOf("me")-1);
+        return "What makes you think I " + something+ " you?";
+    }
+    /**
+     * Take a statement with "I feel <something>" and transform it into
+     * "Why do you feel <something>?"
+     * @return the transformed statement
+     */
+    public static String transformIFeelStatement(String statement) {
+        String ifeel="";
+        ifeel=ifeel.statement.substring((statement.indexOf("feel")+7,statement.length());
+
+        return statement;
+
+transformIFeelStatement("I feel good");
+
     }
 }
+
+
+
+//statement.indexOf("mother")--> findWord(statement,"Mother")
